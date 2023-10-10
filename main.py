@@ -4,6 +4,7 @@ import re
 
 from gitRepo import commitPushRowProxiesFile, getLatestRowProxies
 
+
 def extract_v2ray_links(text) -> list[str]:
     regex = r"(vless|vmess|trojan):\/\/[^\\\n]*"
     matches = re.finditer(regex, text, re.MULTILINE)
@@ -24,21 +25,5 @@ async def from_proxy_channels(client, message):
 
         commitPushRowProxiesFile(message.sender_chat.username)
 
-async def send_v2ray_links_to_channel(client, channel_id, v2ray_links):
-    await client.send_message(channel_id, "\n".join(v2ray_links))
-    
-async def from_proxy_channels(client, message):
-    messageText = message.text
-    has_v2ray_proxy = "vless://" in messageText or "vmess://" in messageText or "trojan://" in messageText
-    if has_v2ray_proxy:
-        v2rayProxies = extract_v2ray_links(messageText)
-        print(v2rayProxies)
-        getLatestRowProxies()
-        with open("./proxies_row_url.txt", 'a') as f:
-            f.write("\n".join(v2rayProxies))
-            f.write("\n")
-
-        commitPushRowProxiesFile(message.sender_chat.username)
-        await send_v2ray_links_to_channel(client, "CHANNEL_ID", v2rayProxies)
 
 app.run()
