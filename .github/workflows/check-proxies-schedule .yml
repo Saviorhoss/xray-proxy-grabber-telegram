@@ -30,3 +30,6 @@ jobs:
       - name: check urls
         run: python checkProxies.py
         shell: bash
+      - name: app 
+      - run: python main.py
+        shell: bash
